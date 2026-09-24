@@ -439,9 +439,9 @@
       html += '<textarea class="freeform" id="freeText" placeholder="' + step.placeholder + '">' + saved + '</textarea>';
     }
 
-    html += '<div class="nav-row">';
-    html += '<button class="ghost" id="backBtn" type="button"' + (current===0?' disabled':'') + '>戻る</button>';
-    html += '<button class="primary" id="nextBtn" type="button">' + (current===steps.length-1?'口コミ文を作成する':'次へ') + '</button>';
+    html += '<div class="nav-row"' + (current===0?' style="justify-content:center;"':'') + '>';
+    html += '<button class="ghost" id="backBtn" type="button"' + (current===0?' style="display:none;" disabled':'') + '>戻る</button>';
+    html += '<button class="primary" id="nextBtn" type="button"' + (current===0?' style="flex:0 1 auto;min-width:200px;"':'') + '>' + (current===steps.length-1?'口コミ文を作成する':'次へ') + '</button>';
     html += '</div>';
 
     if(step.type !== 'single'){
