@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>口コミ作成シート | 横浜ひざ整体院</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#2f3b34;
+    --ink-soft:#5b6a61;
+    --paper:#f6f2ea;
+    --paper-raise:#ffffff;
+    --moss:#54705f;
+    --moss-deep:#3c5548;
+    --moss-pale:#e3ebe3;
+    --clay:#c98a5e;
+    --line:#d8d0c1;
+    --radius:18px;
+    --serif:'Shippori Mincho', serif;
+    --sans:'Noto Sans JP', sans-serif;
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --ink:#ece7dc;
+      --ink-soft:#b9c2ba;
+      --paper:#1c211d;
+      --paper-raise:#262c26;
+      --moss:#8fae9b;
+      --moss-deep:#a9c7b6;
+      --moss-pale:#2b3730;
+      --clay:#d99f78;
+      --line:#3a4038;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#ece7dc;
+    --ink-soft:#b9c2ba;
+    --paper:#1c211d;
+    --paper-raise:#262c26;
+    --moss:#8fae9b;
+    --moss-deep:#a9c7b6;
+    --moss-pale:#2b3730;
+    --clay:#d99f78;
+    --line:#3a4038;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.9;
+    -webkit-font-smoothing:antialiased;
+    padding:0 0 64px;
+  }
+
+  .wrap{
+    max-width:640px;
+    margin:0 auto;
+    padding:36px 20px 0;
+  }
+
+  header.masthead{
+    text-align:center;
+    margin-bottom:30px;
+  }
+  header.masthead .eyebrow{
+    font-size:13px;
+    color:var(--moss);
+    letter-spacing:.08em;
+    margin-bottom:6px;
+  }
+  header.masthead h1{
+    font-family:var(--serif);
+    font-weight:700;
+    font-size:26px;
+    margin:0 0 10px;
+    color:var(--ink);
+  }
+  header.masthead p{
+    font-size:15px;
+    color:var(--ink-soft);
+    margin:0;
+    max-width:46ch;
+    margin:0 auto;
+  }
+
+  .progress{
+    display:flex;
+    gap:8px;
+    justify-content:center;
+    margin:26px 0 8px;
+  }
+  .progress .dot{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--line);
+    transition:background .25s ease, transform .25s ease;
+  }
+  .progress .dot.active{ background:var(--moss); transform:scale(1.25); }
+  .progress .dot.done{ background:var(--moss-pale); }
+
+  .step-label{
+    text-align:center;
+    font-size:13px;
+    color:var(--ink-soft);
+    margin-bottom:22px;
+  }
+
+  .card{
+    background:var(--paper-raise);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:28px 24px 24px;
+    box-shadow:0 1px 0 rgba(0,0,0,.02);
+  }
+
+  .question{
+    font-family:var(--serif);
+    font-size:19px;
+    font-weight:700;
+    margin:0 0 4px;
+    color:var(--ink);
+  }
+  .question-sub{
+    font-size:13.5px;
+    color:var(--ink-soft);
+    margin:0 0 20px;
+  }
+
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .opt{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    padding:15px 16px;
+    border:1.5px solid var(--line);
+    border-radius:14px;
+    cursor:pointer;
+    font-size:15.5px;
+    background:var(--paper);
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .opt:hover{ border-color:var(--moss); }
+  .opt input{
+    margin-top:3px;
+    accent-color:var(--moss-deep);
+    width:18px;height:18px;
+    flex-shrink:0;
+  }
+  .opt.checked{
+    border-color:var(--moss);
+    background:var(--moss-pale);
+  }
+
+  textarea.freeform{
+    width:100%;
+    min-height:110px;
+    resize:vertical;
+    font-family:var(--sans);
+    font-size:15.5px;
+    padding:14px 16px;
+    border:1.5px solid var(--line);
+    border-radius:14px;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.8;
+  }
+  textarea.freeform:focus{ outline:2px solid var(--moss); outline-offset:1px; }
+  textarea.freeform::placeholder{ color:#9aa39c; }
+
+  .nav-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:26px;
+    gap:12px;
+  }
+  button{
+    font-family:var(--sans);
+    font-size:15.5px;
+    font-weight:500;
+    border-radius:100px;
+    border:none;
+    padding:13px 24px;
+    cursor:pointer;
+    transition:opacity .15s ease, transform .1s ease;
+  }
+  button:active{ transform:scale(.98); }
+  button.primary{
+    background:var(--moss-deep);
+    color:#fff;
+    flex:1;
+  }
+  button.primary:disabled{
+    background:var(--line);
+    color:var(--ink-soft);
+    cursor:not-allowed;
+  }
+  button.ghost{
+    background:transparent;
+    color:var(--ink-soft);
+    border:1.5px solid var(--line);
+  }
+  button.ghost:disabled{ visibility:hidden; }
+
+  .skip{
+    text-align:center;
+    margin-top:14px;
+  }
+  .skip a{
+    font-size:13.5px;
+    color:var(--ink-soft);
+    text-decoration:underline;
+    cursor:pointer;
+  }
+
+  /* result screen */
+  .result-head{
+    font-family:var(--serif);
+    font-weight:700;
+    font-size:22px;
+    text-align:center;
+    margin:4px 0 6px;
+  }
+  .result-sub{
+    text-align:center;
+    font-size:14px;
+    color:var(--ink-soft);
+    margin:0 0 22px;
+  }
+  textarea.result{
+    width:100%;
+    min-height:220px;
+    font-family:var(--sans);
+    font-size:16px;
+    line-height:2;
+    padding:20px;
+    border:1.5px solid var(--line);
+    border-radius:16px;
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .charcount{
+    text-align:right;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin-top:6px;
+  }
+  .actions{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:20px;
+  }
+  button.regen{
+    background:transparent;
+    border:1.5px solid var(--line);
+    color:var(--moss-deep);
+    font-size:14.5px;
+    padding:10px 18px;
+  }
+  a.google-btn{
+    display:block;
+    text-align:center;
+    background:var(--clay);
+    color:#fff;
+    text-decoration:none;
+    border-radius:100px;
+    padding:14px 24px;
+    font-weight:500;
+    font-size:16px;
+  }
+  .copy-toast{
+    text-align:center;
+    font-size:13.5px;
+    color:var(--moss-deep);
+    height:18px;
+    margin-top:4px;
+  }
+  .note{
+    font-size:12.5px;
+    color:var(--ink-soft);
+    text-align:center;
+    margin-top:18px;
+    line-height:1.7;
+  }
+  .restart{
+    text-align:center;
+    margin-top:22px;
+  }
+  .restart a{
+    font-size:13.5px;
+    color:var(--ink-soft);
+    text-decoration:underline;
+    cursor:pointer;
+  }
+
+  .hidden{ display:none !important; }
+
+  @media (max-width:420px){
+    .wrap{ padding:24px 14px 0; }
+    .card{ padding:22px 18px 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <div class="eyebrow">横浜ひざ整体院</div>
+    <h1>口コミ作成シート</h1>
+    <p>4つの質問に答えるだけで、Googleの口コミ文章ができあがります。ご自身の言葉に書き直していただいても構いません。</p>
+  </header>
+
+  <div class="progress" id="progress"></div>
+  <div class="step-label" id="stepLabel"></div>
+
+  <div class="card" id="formCard">
+    <!-- steps injected here -->
+  </div>
+
+  <div class="card hidden" id="resultCard">
+    <div class="result-head">できあがりました</div>
+    <div class="result-sub">内容をご確認のうえ、必要であれば自由に編集してください</div>
+    <textarea class="result" id="resultText"></textarea>
+    <div class="charcount" id="charcount">0文字</div>
+    <div class="actions">
+      <button class="regen" id="regenBtn" type="button">別の言い回しでもう一度作る</button>
+      <button class="primary" id="copyBtn" type="button" style="width:100%;">この文章をコピーする</button>
+      <div class="copy-toast" id="copyToast"></div>
+      <a class="google-btn" id="googleBtn" href="#" target="_blank" rel="noopener">Googleの口コミ投稿ページを開く</a>
+    </div>
+    <div class="note">コピーしたあと、開いたページに貼り付けて投稿してください。<br>ご協力いただきありがとうございます。</div>
+    <div class="restart"><a id="restartLink">最初からやり直す</a></div>
+  </div>
+</div>
+
+<script>
+(function(){
+
+  var steps = [
+    {
+      key:'motive',
+      type:'single',
+      question:'当院に来られたきっかけは何でしたか？',
+      sub:'一番近いものをお選びください',
+      options:[
+        {id:'walk', label:'歩くのが不安だった'},
+        {id:'stairs', label:'階段の上り下りがつらかった'},
+        {id:'seiza', label:'正座やしゃがむ動作がつらかった'},
+        {id:'hospital', label:'病院では様子見と言われ、他に方法がないか探していた'},
+        {id:'other_motive', label:'その他', hasText:true, placeholder:'例）友人にすすめられて　など'}
+      ]
+    },
+    {
+      key:'good',
+      type:'multi',
+      question:'通ってみて良かったことは何ですか？',
+      sub:'当てはまるものをいくつでもお選びください',
+      options:[
+        {id:'explain', label:'症状や原因を丁寧に説明してくれる'},
+        {id:'gentle', label:'施術が優しく、安心して受けられる'},
+        {id:'talk', label:'話しやすく、相談しやすい雰囲気'},
+        {id:'homecare', label:'自宅でできるケアの方法も教えてもらえる'},
+        {id:'pace', label:'無理に通院を勧められず、自分のペースで通える'}
+      ]
+    },
+    {
+      key:'change',
+      type:'text',
+      question:'今、感じている変化があれば教えてください',
+      sub:'任意でご記入ください（空欄でも大丈夫です）',
+      placeholder:'例）階段の上り下りが楽になった／正座ができるようになった　など'
+    },
+    {
+      key:'message',
+      type:'text',
+      question:'同じように膝でお悩みの方へ、一言お願いします',
+      sub:'任意でご記入ください（空欄でも大丈夫です）',
+      placeholder:'例）一人で悩まず、一度相談してみるといいと思います　など'
+    }
+  ];
+
+  var current = 0;
+  var answers = {};
+
+  var formCard = document.getElementById('formCard');
+  var resultCard = document.getElementById('resultCard');
+  var progressEl = document.getElementById('progress');
+  var stepLabelEl = document.getElementById('stepLabel');
+
+  function renderProgress(){
+    progressEl.innerHTML = '';
+    for(var i=0;i<steps.length;i++){
+      var d = document.createElement('div');
+      d.className = 'dot' + (i===current?' active':(i<current?' done':''));
+      progressEl.appendChild(d);
+    }
+    stepLabelEl.textContent = '質問 ' + (current+1) + ' / ' + steps.length;
+  }
+
+  function renderStep(){
+    renderProgress();
+    var step = steps[current];
+    var html = '';
+    html += '<div class="question">' + step.question + '</div>';
+    html += '<div class="question-sub">' + step.sub + '</div>';
+
+    if(step.type === 'single' || step.type === 'multi'){
+      html += '<div class="options" id="optionsWrap">';
+      step.options.forEach(function(opt){
+        var savedMulti = answers[step.key] && answers[step.key].ids && answers[step.key].ids.indexOf(opt.id) > -1;
+        var savedSingle = answers[step.key] && answers[step.key].id === opt.id;
+        var checked = step.type==='multi' ? savedMulti : savedSingle;
+        html += '<label class="opt' + (checked?' checked':'') + '" data-id="' + opt.id + '">';
+        html += '<input type="' + (step.type==='multi'?'checkbox':'radio') + '" name="' + step.key + '" value="' + opt.id + '"' + (checked?' checked':'') + '>';
+        html += '<span>' + opt.label + '</span>';
+        html += '</label>';
+      });
+      html += '</div>';
+      // free text option area (for options with hasText)
+      step.options.forEach(function(opt){
+        if(opt.hasText){
+          var savedText = (answers[step.key] && answers[step.key].otherText) || '';
+          html += '<div id="otherTextWrap_' + opt.id + '" style="margin-top:12px;' + ((checkedNow(step,opt.id))?'':'display:none;') + '">';
+          html += '<textarea class="freeform" id="otherText_' + opt.id + '" placeholder="' + opt.placeholder + '">' + savedText + '</textarea>';
+          html += '</div>';
+        }
+      });
+    } else if(step.type === 'text'){
+      var saved = answers[step.key] || '';
+      html += '<textarea class="freeform" id="freeText" placeholder="' + step.placeholder + '">' + saved + '</textarea>';
+    }
+
+    html += '<div class="nav-row">';
+    html += '<button class="ghost" id="backBtn" type="button"' + (current===0?' disabled':'') + '>戻る</button>';
+    html += '<button class="primary" id="nextBtn" type="button">' + (current===steps.length-1?'口コミ文を作成する':'次へ') + '</button>';
+    html += '</div>';
+
+    if(step.type !== 'single'){
+      html += '<div class="skip"><a id="skipLink">この質問はとばす</a></div>';
+    }
+
+    formCard.innerHTML = html;
+    bindStepEvents(step);
+  }
+
+  function checkedNow(step, optId){
+    if(!answers[step.key]) return false;
+    if(step.type==='single') return answers[step.key].id === optId;
+    if(step.type==='multi') return answers[step.key].ids && answers[step.key].ids.indexOf(optId) > -1;
+    return false;
+  }
+
+  function bindStepEvents(step){
+    if(step.type==='single' || step.type==='multi'){
+      var opts = formCard.querySelectorAll('.opt');
+      opts.forEach(function(optEl){
+        optEl.addEventListener('click', function(e){
+          var id = optEl.getAttribute('data-id');
+          if(step.type==='single'){
+            opts.forEach(function(o){ o.classList.remove('checked'); });
+            optEl.classList.add('checked');
+            optEl.querySelector('input').checked = true;
+          } else {
+            var input = optEl.querySelector('input');
+            // allow the native click on the input itself to toggle naturally
+            if(e.target !== input){ input.checked = !input.checked; }
+            optEl.classList.toggle('checked', input.checked);
+          }
+          // toggle any linked free text box
+          var opt = step.options.find(function(o){ return o.id===id; });
+          if(opt && opt.hasText){
+            var wrap = document.getElementById('otherTextWrap_' + id);
+            if(wrap) wrap.style.display = optEl.querySelector('input').checked ? 'block' : 'none';
+          }
+        });
+      });
+    }
+    document.getElementById('backBtn').addEventListener('click', function(){
+      saveStep(step);
+      current = Math.max(0, current-1);
+      renderStep();
+    });
+    document.getElementById('nextBtn').addEventListener('click', function(){
+      saveStep(step);
+      if(current === steps.length-1){
+        showResult();
+      } else {
+        current++;
+        renderStep();
+      }
+    });
+    var skip = document.getElementById('skipLink');
+    if(skip){
+      skip.addEventListener('click', function(){
+        delete answers[step.key];
+        if(current === steps.length-1){ showResult(); }
+        else { current++; renderStep(); }
+      });
+    }
+  }
+
+  function saveStep(step){
+    if(step.type==='single'){
+      var checkedEl = formCard.querySelector('input[name="'+step.key+'"]:checked');
+      if(checkedEl){
+        var id = checkedEl.value;
+        var entry = {id:id};
+        var opt = step.options.find(function(o){ return o.id===id; });
+        if(opt && opt.hasText){
+          var ta = document.getElementById('otherText_'+id);
+          entry.otherText = ta ? ta.value.trim() : '';
+        }
+        answers[step.key] = entry;
+      }
+    } else if(step.type==='multi'){
+      var checkedEls = formCard.querySelectorAll('input[name="'+step.key+'"]:checked');
+      var ids = Array.prototype.map.call(checkedEls, function(el){ return el.value; });
+      answers[step.key] = {ids:ids};
+    } else if(step.type==='text'){
+      var val = document.getElementById('freeText').value.trim();
+      if(val) answers[step.key] = val;
+    }
+  }
+
+  // ---- text generation ----
+
+  var motiveText = {
+    walk: ['歩くことに不安を感じていて', '歩くのが怖くなってきていて'],
+    stairs: ['階段の上り下りがつらくなってきていて', '階段の昇り降りが負担に感じていて'],
+    seiza: ['正座やしゃがむ動作がつらくなっていて', 'しゃがんだり正座をするのが難しくなっていて'],
+    hospital: ['病院では様子を見ましょうと言われ、他に方法がないか探していて', '病院で経過観察と言われ、少し不安に思っていて']
+  };
+
+  var goodText = {
+    explain: ['症状や原因をとても丁寧に説明してくださる', 'なぜ膝が痛むのか、納得できるまで説明してもらえる'],
+    gentle: ['施術がとても優しく、安心して受けられる', '力加減も優しくて、痛みが強い時でも安心してお任せできる'],
+    talk: ['話しやすい雰囲気で、ちょっとしたことでも相談しやすい', '院長先生が気さくで、相談しやすい雰囲気'],
+    homecare: ['自宅でできるケアの方法まで教えてくださる', '通院日以外の過ごし方やセルフケアも教えてもらえる'],
+    pace: ['通うペースを無理に決められることがなく、自分の都合に合わせられる', '通院のペースを押し付けられず、自分のペースで続けられる']
+  };
+
+  function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+  function joinList(items){
+    if(items.length===0) return '';
+    if(items.length===1) return items[0];
+    if(items.length===2) return items[0] + 'し、' + items[1];
+    return items.slice(0,-1).join('、') + '、そして' + items[items.length-1];
+  }
+
+  var nameChoice = 'sasaki';
+  var nameLabel = { clinic: '横浜ひざ整体院さん', sasaki: '佐々木さん' };
+
+  function generateReview(){
+    var lines = [];
+    var who = nameLabel[nameChoice] || nameLabel.clinic;
+
+    // opening
+    var motive = answers.motive;
+    if(motive){
+      var key = motive.id;
+      if(key === 'other_motive' && motive.otherText){
+        lines.push(motive.otherText + '、' + who + 'にお世話になりました。');
+      } else if(motiveText[key]){
+        lines.push(pick(motiveText[key]) + '、' + who + 'にお世話になりました。');
+      } else {
+        lines.push('膝の不調で悩んでいたところ、' + who + 'にお世話になりました。');
+      }
+    } else {
+      lines.push('膝の不調で悩んでいたところ、' + who + 'にお世話になりました。');
+    }
+
+    // good points
+    var good = answers.good;
+    if(good && good.ids && good.ids.length){
+      var phrases = good.ids.map(function(id){ return goodText[id] ? pick(goodText[id]) : null; }).filter(Boolean);
+      if(phrases.length){
+        lines.push(joinList(phrases) + 'ところが良かったです。');
+      }
+    }
+
+    // change
+    if(answers.change){
+      lines.push(answers.change + '、と実感しています。');
+    }
+
+    // closing message
+    if(answers.message){
+      lines.push(answers.message);
+    } else {
+      lines.push('膝のことで悩んでいる方は、一度相談してみるといいと思います。');
+    }
+
+    lines.push('ありがとうございました。');
+
+    return lines.join('\n');
+  }
+
+  function showResult(){
+    document.getElementById('formCard').classList.add('hidden');
+    document.getElementById('progress').classList.add('hidden');
+    document.getElementById('stepLabel').classList.add('hidden');
+    resultCard.classList.remove('hidden');
+    var text = generateReview();
+    var ta = document.getElementById('resultText');
+    ta.value = text;
+    updateCharcount();
+    ta.addEventListener('input', updateCharcount);
+
+    document.getElementById('googleBtn').href = 'https://g.page/r/CWifqRMW1hH9EBM/review';
+  }
+
+  function updateCharcount(){
+    var ta = document.getElementById('resultText');
+    document.getElementById('charcount').textContent = ta.value.length + '文字';
+  }
+
+  document.getElementById('regenBtn').addEventListener('click', function(){
+    var ta = document.getElementById('resultText');
+    ta.value = generateReview();
+    updateCharcount();
+  });
+
+  document.getElementById('copyBtn').addEventListener('click', function(){
+    var ta = document.getElementById('resultText');
+    var toast = document.getElementById('copyToast');
+    ta.select();
+    ta.setSelectionRange(0, 999999);
+    try{
+      navigator.clipboard.writeText(ta.value).then(function(){
+        toast.textContent = 'コピーしました';
+        setTimeout(function(){ toast.textContent=''; }, 2200);
+      }).catch(function(){ fallbackCopy(ta, toast); });
+    } catch(e){
+      fallbackCopy(ta, toast);
+    }
+  });
+
+  function fallbackCopy(ta, toast){
+    try{
+      document.execCommand('copy');
+      toast.textContent = 'コピーしました';
+    }catch(e){
+      toast.textContent = '選択された文章を手動でコピーしてください';
+    }
+    setTimeout(function(){ toast.textContent=''; }, 2200);
+  }
+
+  document.getElementById('restartLink').addEventListener('click', function(){
+    answers = {};
+    current = 0;
+    nameChoice = 'sasaki';
+    resultCard.classList.add('hidden');
+    document.getElementById('formCard').classList.remove('hidden');
+    document.getElementById('progress').classList.remove('hidden');
+    document.getElementById('stepLabel').classList.remove('hidden');
+    renderStep();
+  });
+
+  renderStep();
+})();
+</script>
+</body>
+</html>
