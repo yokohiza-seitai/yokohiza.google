@@ -316,7 +316,7 @@
   <header class="masthead">
     <div class="eyebrow">横浜ひざ整体院</div>
     <h1>口コミ作成シート</h1>
-    <p>4つの質問に答えるだけで、Googleの口コミ文章ができあがります。ご自身の言葉に書き直していただいても構いません。</p>
+    <p>5つの質問に答えるだけで、Googleの口コミ文章ができあがります。ご自身の言葉に書き直していただいても構いません。</p>
   </header>
 
   <div class="progress" id="progress"></div>
@@ -357,6 +357,18 @@
         {id:'seiza', label:'正座やしゃがむ動作がつらかった'},
         {id:'hospital', label:'病院では様子見と言われ、他に方法がないか探していた'},
         {id:'other_motive', label:'その他', hasText:true, placeholder:'例）友人にすすめられて　など'}
+      ]
+    },
+    {
+      key:'duration',
+      type:'single',
+      question:'どのくらいの期間、膝のお悩みがありましたか？',
+      sub:'一番近いものをお選びください',
+      options:[
+        {id:'within3', label:'3か月以内'},
+        {id:'3to6', label:'3か月〜6か月'},
+        {id:'6to1y', label:'6か月〜1年'},
+        {id:'over1y', label:'1年以上'}
       ]
     },
     {
@@ -540,6 +552,13 @@
     hospital: ['病院では様子を見ましょうと言われ、他に方法がないか探していて', '病院で経過観察と言われ、少し不安に思っていて']
   };
 
+  var durationText = {
+    within3: '3か月ほど',
+    '3to6': '3〜6か月ほど',
+    '6to1y': '6か月から1年ほど',
+    over1y: '1年以上'
+  };
+
   var goodText = {
     explain: ['症状や原因をとても丁寧に説明してくださる', 'なぜ膝が痛むのか、納得できるまで説明してもらえる'],
     gentle: ['施術がとても優しく、安心して受けられる', '力加減も優しくて、痛みが強い時でも安心してお任せできる'],
@@ -566,17 +585,21 @@
 
     // opening
     var motive = answers.motive;
+    var durationPrefix = '';
+    if(answers.duration && durationText[answers.duration.id]){
+      durationPrefix = durationText[answers.duration.id];
+    }
     if(motive){
       var key = motive.id;
       if(key === 'other_motive' && motive.otherText){
-        lines.push(motive.otherText + '、' + who + 'にお世話になりました。');
+        lines.push(durationPrefix + motive.otherText + '、' + who + 'にお世話になりました。');
       } else if(motiveText[key]){
-        lines.push(pick(motiveText[key]) + '、' + who + 'にお世話になりました。');
+        lines.push(durationPrefix + pick(motiveText[key]) + '、' + who + 'にお世話になりました。');
       } else {
-        lines.push('膝の不調で悩んでいたところ、' + who + 'にお世話になりました。');
+        lines.push(durationPrefix + '膝の不調で悩んでいたところ、' + who + 'にお世話になりました。');
       }
     } else {
-      lines.push('膝の不調で悩んでいたところ、' + who + 'にお世話になりました。');
+      lines.push(durationPrefix + '膝の不調で悩んでいたところ、' + who + 'にお世話になりました。');
     }
 
     // good points
